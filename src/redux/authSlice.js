@@ -32,16 +32,67 @@ export const loginWithFacebookThunk = createAsyncThunk(
   }
 );
 
+// export const getInstagramDataThunk = createAsyncThunk(
+//   "auth/getInstagramData",
+//   async (token, { rejectWithValue }) => {
+//     try {
+//       //Primero se debe obtener el ID de la página de instagram asociada
+//       const facebookURL = facebookApi(token);
+//       const data = await axios.get(facebookURL);
+//       console.log("data de api graph de facebook", data);
+//       // Encontrar la página con una cuenta de Instagram Business asociada
+//       const pageWithInstagram = data.data.find(
+//         (page) => page.instagram_business_account
+//       );
+
+//       if (!pageWithInstagram) {
+//         throw new Error(
+//           "No se encontró una cuenta de Instagram Business asociada"
+//         );
+//       }
+
+//       const instagramBusinessAccountId =
+//         pageWithInstagram.instagram_business_account.id;
+
+//       //Luego, se debe obtener los datos básicos de instagram
+//       const instagramURL = instagramApi(instagramBusinessAccountId, token);
+//       const instagramData = await axios.get(instagramURL);
+//       console.log("datos de instagram", instagramData);
+
+//       return instagramData;
+//     } catch (error) {
+//       console.error(error);
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
 export const getInstagramDataThunk = createAsyncThunk(
   "auth/getInstagramData",
   async (token, { rejectWithValue }) => {
     try {
-      //Primero se debe obtener el ID de la página de instagram asociada
       const facebookURL = facebookApi(token);
-      const data = await axios.get(facebookURL);
-      console.log("data de api graph de facebook", data);
-      // Encontrar la página con una cuenta de Instagram Business asociada
-      const pageWithInstagram = data.data.find(
+      const response = await axios.get(facebookURL);
+        console.log("Respuesta completa de Facebook:", response);
+        
+      // Verifica si data.data es un array
+      if (!Array.isArray(response.data.data)) {
+        console.error(
+          "La respuesta no tiene la estructura esperada:",
+          response.data
+        );
+        throw new Error(
+          "La respuesta de Facebook no tiene la estructura esperada"
+        );
+      }
+
+      // Si data.data está vacío
+      if (response.data.data.length === 0) {
+        console.error("No se encontraron páginas asociadas a la cuenta");
+        throw new Error("No se encontraron páginas asociadas a la cuenta");
+      }
+
+      const pageWithInstagram = response.data.data.find(
         (page) => page.instagram_business_account
       );
 
@@ -54,14 +105,13 @@ export const getInstagramDataThunk = createAsyncThunk(
       const instagramBusinessAccountId =
         pageWithInstagram.instagram_business_account.id;
 
-      //Luego, se debe obtener los datos básicos de instagram
       const instagramURL = instagramApi(instagramBusinessAccountId, token);
       const instagramData = await axios.get(instagramURL);
-      console.log("datos de instagram", instagramData);
+      console.log("datos de instagram", instagramData.data);
 
-      return instagramData;
+      return instagramData.data;
     } catch (error) {
-      console.error(error);
+      console.error("Error detallado:", error);
       return rejectWithValue(error.message);
     }
   }
