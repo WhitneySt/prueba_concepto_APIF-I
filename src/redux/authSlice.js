@@ -12,8 +12,8 @@ export const loginWithFacebookThunk = createAsyncThunk(
   "auth/loginWithFacebook",
   async (_, { rejectWithValue }) => {
     const provider = new FacebookAuthProvider();
-    provider.addScope("instagram_basic");
-    // provider.addScope("pages_show_list");
+    // provider.addScope("instagram_basic");
+    provider.addScope("pages_show_list");
     try {
       const result = await signInWithPopup(auth, provider);
       const credential = FacebookAuthProvider.credentialFromResult(result);
