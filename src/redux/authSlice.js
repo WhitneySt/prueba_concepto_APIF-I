@@ -4,9 +4,9 @@ import { auth } from "../Firebase/firebaseConfig";
 import axios from "axios";
 
 const facebookApi = (token) =>
-  `https://graph.facebook.com/v18.0/me/accounts?access_token=${token}`;
+  `https://graph.facebook.com/v20.0/me/accounts?access_token=${token}`;
 const instagramApi = (instagramBusinessAccountId, token) =>
-  `https://graph.facebook.com/v18.0/${instagramBusinessAccountId}?fields=id,username,profile_picture_url,followers_count,media_count&access_token=${token}`;
+  `https://graph.facebook.com/v20.0/${instagramBusinessAccountId}?fields=id,username,profile_picture_url,followers_count,media_count&access_token=${token}`;
 
 export const loginWithFacebookThunk = createAsyncThunk(
   "auth/loginWithFacebook",
