@@ -4,4 +4,5 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  base: "https://whitneyst.github.io/prueba_concepto_APIF-I/",
+});

@@ -30,7 +30,7 @@ const AppRouter = () => {
     });
   }, [dispatch]);
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/prueba_concepto_APIF-I">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route element={<PrivateRoutes isAuthenticated={isAuthenticated} />}>
