@@ -1,0 +1,49 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { restoreUserData } from "../redux/authSlice";
+import { auth } from "../Firebase/firebaseConfig";
+import PrivateRoutes from "./PrivateRoutes";
+import PublicRoutes from "./PublicRoutes";
+import Layout from "../components/Layout";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+
+const AppRouter = () => {
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((store) => store.auth);
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        dispatch(
+          restoreUserData({
+            id: currentUser.uid,
+            displayName: currentUser.displayName,
+            accessToken: currentUser.accessToken,
+            photoURL: currentUser.photoURL,
+            email: currentUser.email,
+          })
+        );
+      }
+    });
+  }, [dispatch]);
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route element={<PrivateRoutes isAuthenticated={isAuthenticated} />}>
+            <Route index element={<Home />} />
+          </Route>
+          <Route element={<PublicRoutes isAuthenticated={isAuthenticated} />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default AppRouter;
