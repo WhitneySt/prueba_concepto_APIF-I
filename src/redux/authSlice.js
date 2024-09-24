@@ -95,7 +95,9 @@ export const loginWithFacebookThunk = createAsyncThunk(
         accessToken,
         displayName: result.user.displayName,
         email: result.user.email,
-        photoURL: response.data.picture.data.url || result.user.photoURL,
+        photoURL: response.data?.picture?.data?.url
+          ? response.data.picture.data.url
+          : result.user.photoURL,
         providerId: result.providerId,
       };
     } catch (error) {
