@@ -8,6 +8,14 @@ const facebookApi = (token) =>
 const instagramApi = (instagramBusinessAccountId, token) =>
   `https://graph.facebook.com/v20.0/${instagramBusinessAccountId}?fields=id,username,profile_picture_url,followers_count,media_count&access_token=${token}`;
 
+const getFacebookProfileData = async (accessToken) => {
+  const response = await fetch(
+    `https://graph.facebook.com/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
+  );
+  const data = await response.json();
+  return data.picture.data.url;
+};
+
 export const loginWithFacebookThunk = createAsyncThunk(
   "auth/loginWithFacebook",
   async (_, { rejectWithValue }) => {
@@ -20,6 +28,9 @@ export const loginWithFacebookThunk = createAsyncThunk(
       console.log(result);
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const accessToken = credential.accessToken;
+
+      const facebookData = await getFacebookProfileData(accessToken);
+      console.log(facebookData);
       return {
         id: result.user.uid,
         accessToken,
