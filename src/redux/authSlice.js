@@ -16,6 +16,7 @@ export const loginWithFacebookThunk = createAsyncThunk(
     // provider.addScope("pages_show_list");
     try {
       const result = await signInWithPopup(auth, provider);
+      console.log(result);
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const accessToken = credential.accessToken;
       return {
@@ -73,8 +74,7 @@ export const getInstagramDataThunk = createAsyncThunk(
     try {
       const facebookURL = facebookApi(token);
       const response = await axios.get(facebookURL);
-        console.log("Respuesta completa de Facebook:", response);
-        
+      console.log("Respuesta completa de Facebook:", response);
 
       // Si data.data está vacío
       if (response.data.data.length === 0) {
@@ -107,10 +107,10 @@ export const getInstagramDataThunk = createAsyncThunk(
   }
 );
 
-export const signOutThunk = createAsyncThunk('auth/signOut', async () => {
-    await signOut(auth);
-    return null;
-})
+export const signOutThunk = createAsyncThunk("auth/signOut", async () => {
+  await signOut(auth);
+  return null;
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -157,12 +157,13 @@ const authSlice = createSlice({
       .addCase(getInstagramDataThunk.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
-      }).addCase(signOutThunk.fulfilled, (state) => {
-          state.isAuthenticated = false;
-          state.user = null;
-          state.instagramData = null;
-          state.error = null;
-          state.loading = false;
+      })
+      .addCase(signOutThunk.fulfilled, (state) => {
+        state.isAuthenticated = false;
+        state.user = null;
+        state.instagramData = null;
+        state.error = null;
+        state.loading = false;
       });
   },
 });

@@ -10,6 +10,7 @@ import Layout from "../components/Layout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Feed from "../pages/Feed";
 
 const AppRouter = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const AppRouter = () => {
         <Route path="/" element={<Layout />}>
           <Route element={<PrivateRoutes isAuthenticated={isAuthenticated} />}>
             <Route index element={<Home />} />
+            <Route path="feed" element={<Feed />} />
           </Route>
           <Route element={<PublicRoutes isAuthenticated={isAuthenticated} />}>
             <Route path="login" element={<Login />} />
