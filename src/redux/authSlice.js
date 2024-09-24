@@ -8,30 +8,58 @@ const facebookApi = (token) =>
 const instagramApi = (instagramBusinessAccountId, token) =>
   `https://graph.facebook.com/v20.0/${instagramBusinessAccountId}?fields=id,username,profile_picture_url,followers_count,media_count&access_token=${token}`;
 
-const getFacebookProfileData = async (accessToken) => {
-  try {
-    const response = await axios.get(
-      `https://graph.facebook.com/v20.0/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
-    );
+// const getFacebookProfileData = async (accessToken) => {
+//   try {
+//     const response = await axios.get(
+//       `https://graph.facebook.com/v20.0/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
+//     );
 
-    console.log("Facebook API Response:", response.data);
+//     console.log("Facebook API Response:", response.data);
 
-    if (
-      response.data &&
-      response.data.picture &&
-      response.data.picture.data &&
-      response.data.picture.data.url
-    ) {
-      return response.data.picture.data.url;
-    } else {
-      console.error("Unexpected API response structure:", response.data);
-      return null;
+//     if (
+//       response.data &&
+//       response.data.picture &&
+//       response.data.picture.data &&
+//       response.data.picture.data.url
+//     ) {
+//       return response.data.picture.data.url;
+//     } else {
+//       console.error("Unexpected API response structure:", response.data);
+//       return null;
+//     }
+//   } catch (error) {
+//     console.error("Error fetching Facebook profile data:", error);
+//     return null;
+//   }
+// };
+
+export const getFacebookProfileDataThunk = createAsyncThunk(
+  "auth/getProfilePicture",
+  async (accessToken, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `https://graph.facebook.com/v20.0/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
+      );
+
+      console.log("Facebook API Response:", response.data);
+
+      if (
+        response.data &&
+        response.data.picture &&
+        response.data.picture.data &&
+        response.data.picture.data.url
+      ) {
+        return response.data.picture.data.url;
+      } else {
+        console.error("Unexpected API response structure:", response.data);
+        throw new Error("No se encontró foto");
+      }
+    } catch (error) {
+      console.error("Error fetching Facebook profile data:", error);
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    console.error("Error fetching Facebook profile data:", error);
-    return null;
   }
-};
+);
 
 export const loginWithFacebookThunk = createAsyncThunk(
   "auth/loginWithFacebook",
@@ -46,14 +74,14 @@ export const loginWithFacebookThunk = createAsyncThunk(
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const accessToken = credential.accessToken;
 
-      const facebookData = await getFacebookProfileData(accessToken);
-      console.log(facebookData);
+      //   const facebookData = await getFacebookProfileData(accessToken);
+      //   console.log(facebookData);
       return {
         id: result.user.uid,
         accessToken,
         displayName: result.user.displayName,
         email: result.user.email,
-        photoURL: facebookData || result.user.photoURL,
+        photoURL: result.user.photoURL,
         providerId: result.providerId,
       };
     } catch (error) {
@@ -194,6 +222,9 @@ const authSlice = createSlice({
         state.instagramData = null;
         state.error = null;
         state.loading = false;
+      })
+      .addCase(getFacebookProfileDataThunk.fulfilled, (state, action) => {
+        state.user.photoURL = action.payload;
       });
   },
 });
