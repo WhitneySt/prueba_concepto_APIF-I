@@ -37,8 +37,8 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route element={<PrivateRoutes isAuthenticated={isAuthenticated} />}>
-            <Route index element={<Home />} />
-            <Route path="feed" element={<Feed />} />
+            <Route path="home" element={<Home />} />
+            <Route index element={<Feed />} />
           </Route>
           <Route element={<PublicRoutes isAuthenticated={isAuthenticated} />}>
             <Route path="login" element={<Login />} />

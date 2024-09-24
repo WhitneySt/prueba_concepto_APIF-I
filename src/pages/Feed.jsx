@@ -105,7 +105,7 @@ const Feed = () => {
     }
   }, []);
 
-  if (instagramData) return <Navigate to={"/"} />;
+  if (instagramData) return <Navigate to={"/home"} />;
 
   return (
     <div className="p-4">

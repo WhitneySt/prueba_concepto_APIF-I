@@ -18,7 +18,7 @@ const Home = () => {
     <div>
       Home
       {!instagramData && (
-        <button onClick={() => navigate("/feed")}>
+        <button onClick={() => navigate("/")}>
           Ir a Feed para autenticarse con Instagram
         </button>
       )}
