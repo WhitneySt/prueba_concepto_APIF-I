@@ -76,12 +76,26 @@ export const loginWithFacebookThunk = createAsyncThunk(
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const accessToken = credential.accessToken;
 
+      const response = await axios.get(
+        `https://graph.facebook.com/v20.0/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
+      );
+      if (
+        response.data &&
+        response.data.picture &&
+        response.data.picture.data &&
+        response.data.picture.data.url
+      ) {
+        await updateProfile(auth.currentUser, {
+          photoURL: response.data.picture.data.url,
+        });
+      }
+
       return {
         id: result.user.uid,
         accessToken,
         displayName: result.user.displayName,
         email: result.user.email,
-        photoURL: result.user.photoURL,
+        photoURL: response.data.picture.data.url || result.user.photoURL,
         providerId: result.providerId,
       };
     } catch (error) {
