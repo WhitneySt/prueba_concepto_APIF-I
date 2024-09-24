@@ -12,7 +12,8 @@ const getFacebookProfileData = async (accessToken) => {
   const response = await fetch(
     `https://graph.facebook.com/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
   );
-  const data = await response.json();
+    const data = await response.json();
+    console.log(data);
   return data.picture.data.url;
 };
 
