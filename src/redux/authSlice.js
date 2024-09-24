@@ -66,16 +66,12 @@ export const loginWithFacebookThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     const provider = new FacebookAuthProvider();
     provider.addScope("public_profile");
-    // provider.addScope("instagram_basic");
-    // provider.addScope("pages_show_list");
     try {
       const result = await signInWithPopup(auth, provider);
       console.log(result);
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const accessToken = credential.accessToken;
 
-      //   const facebookData = await getFacebookProfileData(accessToken);
-      //   console.log(facebookData);
       return {
         id: result.user.uid,
         accessToken,

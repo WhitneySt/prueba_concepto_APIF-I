@@ -16,7 +16,7 @@ const Navbar = () => {
   }, [dispatch, user]);
   return (
     <nav>
-      <span>Home</span>
+      <span>Esto es una prueba</span>
       {isAuthenticated && <button onClick={handleLogout}>Cerrar sesión</button>}
       {user?.photoURL && (
         <figure>
