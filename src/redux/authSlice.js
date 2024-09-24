@@ -12,6 +12,7 @@ export const loginWithFacebookThunk = createAsyncThunk(
   "auth/loginWithFacebook",
   async (_, { rejectWithValue }) => {
     const provider = new FacebookAuthProvider();
+    provider.addScope("public_profile");
     // provider.addScope("instagram_basic");
     // provider.addScope("pages_show_list");
     try {
