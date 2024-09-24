@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { FacebookAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import {
+  FacebookAuthProvider,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 import { auth } from "../Firebase/firebaseConfig";
 import axios from "axios";
 
@@ -49,6 +54,9 @@ export const getFacebookProfileDataThunk = createAsyncThunk(
         response.data.picture.data &&
         response.data.picture.data.url
       ) {
+        await updateProfile(auth.currentUser, {
+          photoURL: response.data.picture.data.url,
+        });
         return response.data.picture.data.url;
       } else {
         console.error("Unexpected API response structure:", response.data);
