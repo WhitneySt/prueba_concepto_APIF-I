@@ -93,13 +93,18 @@ const Feed = () => {
   };
 
   useEffect(() => {
+    console.log("URL después de la redirección:", window.location.href);
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
+    const error = urlParams.get("error");
+    const errorReason = urlParams.get("error_reason");
     console.log(code);
-    if (code) {
+    if (error) {
+      console.error("Error en la autenticación:", error, errorReason);
+      setError(`Error en la autenticación: ${error}. Razón: ${errorReason}`);
+    } else if (code) {
       exchangeCodeForToken(code).then((token) => {
         if (token) {
-          console.log("token", token)
           getUserInfo(token);
           getUserMedia(token);
         }
@@ -111,14 +116,8 @@ const Feed = () => {
 
   return (
     <div className="p-4">
-      <button
-        onClick={handleAuthentication}
-      >
-        Autenticar con Instagram
-      </button>
-      {accessToken && (
-        <p>Token de acceso obtenido: {accessToken}</p>
-      )}
+      <button onClick={handleAuthentication}>Autenticar con Instagram</button>
+      {accessToken && <p>Token de acceso obtenido: {accessToken}</p>}
       {userInfo && (
         <div>
           <h2>Información del usuario:</h2>
@@ -135,13 +134,10 @@ const Feed = () => {
             <div key={media.id}>
               <p>{media.caption}</p>
               {media.media_type === "IMAGE" && (
-                <img
-                  src={media.media_url}
-                  alt={media.caption}
-                />
+                <img src={media.media_url} alt={media.caption} />
               )}
               {media.media_type === "VIDEO" && (
-                <video src={media.media_url} controls/>
+                <video src={media.media_url} controls />
               )}
             </div>
           ))}
@@ -156,27 +152,18 @@ const Feed = () => {
           onChange={(e) => setSearchUsername(e.target.value)}
           placeholder="Buscar cuenta de Instagram"
         />
-        <button
-          onClick={handleSearch}
-        >
-          Buscar
-        </button>
+        <button onClick={handleSearch}>Buscar</button>
       </div>
 
       {publicAccountInfo && (
         <div>
-          <h2>
-            Información de la cuenta pública:
-          </h2>
+          <h2>Información de la cuenta pública:</h2>
           <p>Username: {publicAccountInfo.username}</p>
           <p>Name: {publicAccountInfo.name}</p>
           <p>Followers: {publicAccountInfo.followers_count}</p>
           <p>Following: {publicAccountInfo.follows_count}</p>
           <p>Media Count: {publicAccountInfo.media_count}</p>
-          <img
-            src={publicAccountInfo.profile_picture_url}
-            alt="Profile"
-          />
+          <img src={publicAccountInfo.profile_picture_url} alt="Profile" />
         </div>
       )}
 
@@ -194,10 +181,7 @@ const Feed = () => {
                   />
                 )}
                 {media.media_type === "VIDEO" && (
-                  <video
-                    src={media.media_url}
-                    controls
-                  />
+                  <video src={media.media_url} controls />
                 )}
                 <p className="mt-2 text-sm">
                   {media.caption
