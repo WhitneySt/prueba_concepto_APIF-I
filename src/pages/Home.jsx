@@ -25,11 +25,12 @@ const Home = () => {
     }
   };
 
-  const getUserInfo = async (token) => {
+  const getUserInfo = async (atoken) => {
     try {
       const response = await axios.post(endpoints.userInfo, {
-        accessToken: token,
+        accessToken: atoken,
       });
+      console.log(response.data);
       setUserInfo(response.data);
     } catch (err) {
       setErrorToken("Error al obtener la información del usuario");
@@ -37,10 +38,10 @@ const Home = () => {
     }
   };
 
-  const getUserMedia = async (token) => {
+  const getUserMedia = async (atoken) => {
     try {
       const response = await axios.post(endpoints.userMedia, {
-        accessToken: token,
+        accessToken: atoken,
       });
       setUserMedia(response.data);
     } catch (err) {
@@ -52,20 +53,20 @@ const Home = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
     if (code) {
-      exchangeCodeForToken(code).then((token) => {
-        if (token) {
-          getUserInfo(token);
-          getUserMedia(token);
+      exchangeCodeForToken(code).then((atoken) => {
+        if (atoken) {
+          getUserInfo(atoken);
+          getUserMedia(atoken);
         }
       });
     }
   }, []);
 
   useEffect(() => {
-    if (user?.accessToken) {
+    if (user?.accessToken && !token) {
       dispatch(getInstagramDataThunk(user.accessToken));
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, token]);
 
   const handleInstagramAuthentication = () => {
     const authUrl = `https://api.instagram.com/oauth/authorize?client_id=${INSTAGRAM_APP_ID}&redirect_uri=${REDIRECT_URL}&scope=user_profile,user_media&response_type=code`;
