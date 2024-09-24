@@ -17,6 +17,7 @@ const Home = () => {
     try {
       const response = await axios.post(endpoints.userAuth, { code });
       const atoken = response.data.access_token;
+      console.log("Token de exchangeCodeForToken", atoken);
       setToken(atoken);
       return atoken;
     } catch (err) {
@@ -30,7 +31,7 @@ const Home = () => {
       const response = await axios.post(endpoints.userInfo, {
         accessToken: atoken,
       });
-      console.log(response.data);
+      console.log("user-info", response.data);
       setUserInfo(response.data);
     } catch (err) {
       setErrorToken("Error al obtener la información del usuario");
@@ -43,6 +44,7 @@ const Home = () => {
       const response = await axios.post(endpoints.userMedia, {
         accessToken: atoken,
       });
+      console.log("user-media", response);
       setUserMedia(response.data);
     } catch (err) {
       setErrorToken("Error al obtener los medios del usuario");
@@ -81,6 +83,7 @@ const Home = () => {
           Autenticar con Instagram
         </button>
       )}
+      {error && <div>Error: {error}</div>}
       {token && <div>AccessToken: {token}</div>}
       {errorToken && <div>Error: {errorToken}</div>}
       {userInfo && (
