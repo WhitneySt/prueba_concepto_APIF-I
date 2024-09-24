@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import endpoints, { INSTAGRAM_APP_ID, REDIRECT_URL } from "../config";
-import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+// import { useSelector } from "react-redux";
+// import { Navigate } from "react-router-dom";
 
 const Feed = () => {
   const [accessToken, setAccessToken] = useState(null);
@@ -13,7 +13,7 @@ const Feed = () => {
   const [publicAccountMedia, setPublicAccountMedia] = useState(null);
   const [searchUsername, setSearchUsername] = useState("");
 
-  const { instagramData } = useSelector((store) => store.auth);
+  // const { instagramData } = useSelector((store) => store.auth);
 
   const exchangeCodeForToken = async (code) => {
     try {
@@ -105,7 +105,7 @@ const Feed = () => {
     }
   }, []);
 
-  if (instagramData) return <Navigate to={"/home"} />;
+  // if (instagramData) return <Navigate to={"/home"} />;
 
   return (
     <div className="p-4">
