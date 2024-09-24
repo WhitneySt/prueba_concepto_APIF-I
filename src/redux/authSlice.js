@@ -10,10 +10,10 @@ const instagramApi = (instagramBusinessAccountId, token) =>
 
 const getFacebookProfileData = async (accessToken) => {
   const data = await axios.get(
-    `https://graph.facebook.com/v20.0/me?fields=id,name,picture,avatar_2d_profile_picture&access_token=${accessToken}`
+    `https://graph.facebook.com/v20.0/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
   );
-    console.log(data);
-  return data.picture.data.url;
+    console.log(data.data.picture.data.url);
+  return data.data.picture.data.url;
 };
 
 export const loginWithFacebookThunk = createAsyncThunk(
