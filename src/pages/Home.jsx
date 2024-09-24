@@ -16,9 +16,9 @@ const Home = () => {
   const exchangeCodeForToken = async (code) => {
     try {
       const response = await axios.post(endpoints.userAuth, { code });
-      const token = response.data.access_token;
-      setToken(token);
-      return token;
+      const atoken = response.data.access_token;
+      setToken(atoken);
+      return atoken;
     } catch (err) {
       setErrorToken("Error al obtener el token de acceso");
       console.error("Error:", err);
