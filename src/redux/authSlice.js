@@ -53,7 +53,7 @@ export const loginWithFacebookThunk = createAsyncThunk(
         accessToken,
         displayName: result.user.displayName,
         email: result.user.email,
-        photoURL: result.user.photoURL,
+        photoURL: facebookData || result.user.photoURL,
         providerId: result.providerId,
       };
     } catch (error) {
