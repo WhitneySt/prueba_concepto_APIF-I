@@ -75,16 +75,6 @@ export const getInstagramDataThunk = createAsyncThunk(
       const response = await axios.get(facebookURL);
         console.log("Respuesta completa de Facebook:", response);
         
-      // Verifica si data.data es un array
-      if (!Array.isArray(response.data.data)) {
-        console.error(
-          "La respuesta no tiene la estructura esperada:",
-          response.data
-        );
-        throw new Error(
-          "La respuesta de Facebook no tiene la estructura esperada"
-        );
-      }
 
       // Si data.data está vacío
       if (response.data.data.length === 0) {
