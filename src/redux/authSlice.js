@@ -9,11 +9,28 @@ const instagramApi = (instagramBusinessAccountId, token) =>
   `https://graph.facebook.com/v20.0/${instagramBusinessAccountId}?fields=id,username,profile_picture_url,followers_count,media_count&access_token=${token}`;
 
 const getFacebookProfileData = async (accessToken) => {
-  const data = await axios.get(
-    `https://graph.facebook.com/v20.0/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
-  );
-    console.log(data.data.picture.data.url);
-  return data.data.picture.data.url;
+  try {
+    const response = await axios.get(
+      `https://graph.facebook.com/v20.0/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
+    );
+
+    console.log("Facebook API Response:", response.data);
+
+    if (
+      response.data &&
+      response.data.picture &&
+      response.data.picture.data &&
+      response.data.picture.data.url
+    ) {
+      return response.data.picture.data.url;
+    } else {
+      console.error("Unexpected API response structure:", response.data);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching Facebook profile data:", error);
+    return null;
+  }
 };
 
 export const loginWithFacebookThunk = createAsyncThunk(
