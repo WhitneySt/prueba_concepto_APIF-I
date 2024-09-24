@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getFacebookProfileDataThunk, signOutThunk } from "../redux/authSlice";
-import { useEffect } from "react";
+import { signOutThunk } from "../redux/authSlice";
+// import { useEffect } from "react";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -9,11 +9,11 @@ const Navbar = () => {
     dispatch(signOutThunk());
   };
 
-  useEffect(() => {
-    if (user?.accessToken) {
-      dispatch(getFacebookProfileDataThunk(user.accessToken));
-    }
-  }, [dispatch, user]);
+//   useEffect(() => {
+//     if (user?.accessToken) {
+//       dispatch(getFacebookProfileDataThunk(user.accessToken));
+//     }
+//   }, [dispatch, user]);
   return (
     <nav>
       <span>Esto es una prueba</span>

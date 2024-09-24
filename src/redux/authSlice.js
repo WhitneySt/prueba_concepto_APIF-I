@@ -45,9 +45,6 @@ export const getFacebookProfileDataThunk = createAsyncThunk(
       const response = await axios.get(
         `https://graph.facebook.com/v20.0/me?fields=id,name,picture.type(large)&access_token=${accessToken}`
       );
-
-      console.log("Facebook API Response:", response.data);
-
       if (
         response.data &&
         response.data.picture &&
@@ -76,7 +73,6 @@ export const loginWithFacebookThunk = createAsyncThunk(
     provider.addScope("public_profile");
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log(result);
       const credential = FacebookAuthProvider.credentialFromResult(result);
       const accessToken = credential.accessToken;
 
