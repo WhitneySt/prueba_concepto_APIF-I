@@ -25,6 +25,7 @@ export const loginWithFacebookThunk = createAsyncThunk(
         displayName: result.user.displayName,
         email: result.user.email,
         photoURL: result.user.photoURL,
+        providerId: result.providerId,
       };
     } catch (error) {
       console.error(error);
