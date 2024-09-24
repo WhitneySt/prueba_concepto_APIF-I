@@ -26,6 +26,7 @@ const AppRouter = () => {
             accessToken: currentUser.accessToken,
             photoURL: currentUser.photoURL,
             email: currentUser.email,
+            providerId: currentUser.providerData[0].providerId,
           })
         );
       }
