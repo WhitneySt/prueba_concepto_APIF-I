@@ -98,6 +98,7 @@ const Feed = () => {
     if (code) {
       exchangeCodeForToken(code).then((token) => {
         if (token) {
+          console.log("token", token)
           getUserInfo(token);
           getUserMedia(token);
         }
@@ -111,16 +112,15 @@ const Feed = () => {
     <div className="p-4">
       <button
         onClick={handleAuthentication}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       >
         Autenticar con Instagram
       </button>
       {accessToken && (
-        <p className="mt-4">Token de acceso obtenido: {accessToken}</p>
+        <p>Token de acceso obtenido: {accessToken}</p>
       )}
       {userInfo && (
-        <div className="mt-4">
-          <h2 className="text-xl font-bold">Información del usuario:</h2>
+        <div>
+          <h2>Información del usuario:</h2>
           <p>ID: {userInfo.id}</p>
           <p>Username: {userInfo.username}</p>
           <p>Account Type: {userInfo.account_type}</p>
@@ -128,26 +128,25 @@ const Feed = () => {
         </div>
       )}
       {userMedia && (
-        <div className="mt-4">
-          <h2 className="text-xl font-bold">Medios del usuario:</h2>
+        <div>
+          <h2>Medios del usuario:</h2>
           {userMedia.map((media) => (
-            <div key={media.id} className="mt-2">
+            <div key={media.id}>
               <p>{media.caption}</p>
               {media.media_type === "IMAGE" && (
                 <img
                   src={media.media_url}
                   alt={media.caption}
-                  className="max-w-xs"
                 />
               )}
               {media.media_type === "VIDEO" && (
-                <video src={media.media_url} controls className="max-w-xs" />
+                <video src={media.media_url} controls/>
               )}
             </div>
           ))}
         </div>
       )}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {error && <p>{error}</p>}
 
       <div className="mt-4">
         <input
@@ -155,19 +154,17 @@ const Feed = () => {
           value={searchUsername}
           onChange={(e) => setSearchUsername(e.target.value)}
           placeholder="Buscar cuenta de Instagram"
-          className="border p-2 mr-2"
         />
         <button
           onClick={handleSearch}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
         >
           Buscar
         </button>
       </div>
 
       {publicAccountInfo && (
-        <div className="mt-4">
-          <h2 className="text-xl font-bold">
+        <div>
+          <h2>
             Información de la cuenta pública:
           </h2>
           <p>Username: {publicAccountInfo.username}</p>
@@ -178,15 +175,14 @@ const Feed = () => {
           <img
             src={publicAccountInfo.profile_picture_url}
             alt="Profile"
-            className="w-20 h-20 rounded-full"
           />
         </div>
       )}
 
       {publicAccountMedia && (
-        <div className="mt-4">
-          <h2 className="text-xl font-bold">Medios de la cuenta pública:</h2>
-          <div className="grid grid-cols-3 gap-4">
+        <div>
+          <h2>Medios de la cuenta pública:</h2>
+          <div>
             {publicAccountMedia.map((media) => (
               <div key={media.id} className="border p-2">
                 {media.media_type === "IMAGE" && (
@@ -200,7 +196,6 @@ const Feed = () => {
                   <video
                     src={media.media_url}
                     controls
-                    className="w-full h-40 object-cover"
                   />
                 )}
                 <p className="mt-2 text-sm">
@@ -214,7 +209,7 @@ const Feed = () => {
         </div>
       )}
 
-      {error && <p className="mt-4 text-red-500">{error}</p>}
+      {error && <p>{error}</p>}
     </div>
   );
 };

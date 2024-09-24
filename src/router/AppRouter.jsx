@@ -18,7 +18,6 @@ const AppRouter = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        console.log(currentUser);
         dispatch(
           restoreUserData({
             id: currentUser.uid,

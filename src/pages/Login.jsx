@@ -10,6 +10,7 @@ const Login = () => {
   const handleLoginWithFacebook = () => {
     dispatch(loginWithFacebookThunk());
   };
+  
   if (error) {
     alert(error);
   }
