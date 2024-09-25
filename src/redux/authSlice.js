@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   FacebookAuthProvider,
+  GoogleAuthProvider,
   signInWithPopup,
   signOut,
   updateProfile,
@@ -106,6 +107,19 @@ export const loginWithFacebookThunk = createAsyncThunk(
     }
   }
 );
+
+export const loginWithGoogleThunk = createAsyncThunk('auth/loginWithGoogle', async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    return {
+        id: result.user.uid,
+        accessToken: result.user.accessToken,
+        displayName: result.user.displayName,
+        photoURL: result.user.photoURL,
+        email: result.user.email,
+        providerId: result.providerId
+    }
+})
 
 // export const getInstagramDataThunk = createAsyncThunk(
 //   "auth/getInstagramData",
@@ -241,7 +255,12 @@ const authSlice = createSlice({
       })
       .addCase(getFacebookProfileDataThunk.fulfilled, (state, action) => {
         state.user.photoURL = action.payload;
-      });
+      }).addCase(loginWithGoogleThunk.fulfilled, (state, action) => {
+          state.isAuthenticated = true;
+          state.user = action.payload;
+          state.loading = false;
+          state.error = null;
+      })
   },
 });
 
