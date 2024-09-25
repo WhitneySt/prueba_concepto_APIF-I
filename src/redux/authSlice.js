@@ -91,15 +91,15 @@ export const loginWithFacebookThunk = createAsyncThunk(
         });
       }
 
-      const userId = response.data.id;
-      console.log("userIdFace", userId);
+    //   const userId = response.data.id;
+    //   console.log("userIdFace", userId);
 
-      // Obtener datos básicos de Instagram
-      const instagramResponse = await axios.get(
-        `https://graph.instagram.com/${userId}?fields=id,username&access_token=${accessToken}`
-      );
+    //   // Obtener datos básicos de Instagram
+    //   const instagramResponse = await axios.get(
+    //     `https://graph.instagram.com/${userId}?fields=id,username&access_token=${accessToken}`
+    //   );
 
-      console.log("instagramResponse", instagramResponse);
+    //   console.log("instagramResponse", instagramResponse);
 
       return {
         id: result.user.uid,
