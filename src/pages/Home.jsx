@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getInstagramDataThunk } from "../redux/authSlice";
+import { Navigate } from "react-router-dom";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const Home = () => {
   }, [dispatch, user]);
 
   console.log(instagramData);
+  if (user?.providerId === "google.com") return <Navigate to={"/"} />;
   return (
     <div>
       Home
