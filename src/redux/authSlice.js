@@ -91,6 +91,16 @@ export const loginWithFacebookThunk = createAsyncThunk(
         });
       }
 
+      const userId = response.data.id;
+      console.log("userIdFace", userId);
+
+      // Obtener datos básicos de Instagram
+      const instagramResponse = await axios.get(
+        `https://graph.instagram.com/${userId}?fields=id,username&access_token=${accessToken}`
+      );
+
+      console.log("instagramResponse", instagramResponse);
+
       return {
         id: result.user.uid,
         accessToken,
@@ -108,18 +118,21 @@ export const loginWithFacebookThunk = createAsyncThunk(
   }
 );
 
-export const loginWithGoogleThunk = createAsyncThunk('auth/loginWithGoogle', async () => {
+export const loginWithGoogleThunk = createAsyncThunk(
+  "auth/loginWithGoogle",
+  async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     return {
-        id: result.user.uid,
-        accessToken: result.user.accessToken,
-        displayName: result.user.displayName,
-        photoURL: result.user.photoURL,
-        email: result.user.email,
-        providerId: result.providerId
-    }
-})
+      id: result.user.uid,
+      accessToken: result.user.accessToken,
+      displayName: result.user.displayName,
+      photoURL: result.user.photoURL,
+      email: result.user.email,
+      providerId: result.providerId,
+    };
+  }
+);
 
 // export const getInstagramDataThunk = createAsyncThunk(
 //   "auth/getInstagramData",
@@ -255,12 +268,13 @@ const authSlice = createSlice({
       })
       .addCase(getFacebookProfileDataThunk.fulfilled, (state, action) => {
         state.user.photoURL = action.payload;
-      }).addCase(loginWithGoogleThunk.fulfilled, (state, action) => {
-          state.isAuthenticated = true;
-          state.user = action.payload;
-          state.loading = false;
-          state.error = null;
       })
+      .addCase(loginWithGoogleThunk.fulfilled, (state, action) => {
+        state.isAuthenticated = true;
+        state.user = action.payload;
+        state.loading = false;
+        state.error = null;
+      });
   },
 });
 
