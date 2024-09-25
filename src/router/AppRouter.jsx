@@ -7,7 +7,7 @@ import { auth } from "../Firebase/firebaseConfig";
 import PrivateRoutes from "./PrivateRoutes";
 import PublicRoutes from "./PublicRoutes";
 import Layout from "../components/Layout";
-// import Home from "../pages/Home";
+import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Feed from "../pages/Feed";
@@ -36,7 +36,7 @@ const AppRouter = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route element={<PrivateRoutes isAuthenticated={isAuthenticated} />}>
-            {/* <Route path="home" element={<Home />} /> */}
+            <Route path="home" element={<Home />} />
             <Route index element={<Feed />} />
           </Route>
           <Route element={<PublicRoutes isAuthenticated={isAuthenticated} />}>
