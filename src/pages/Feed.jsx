@@ -92,25 +92,19 @@ const Feed = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("URL después de la redirección:", window.location.href);
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
-    const error = urlParams.get("error");
-    const errorReason = urlParams.get("error_reason");
-    console.log(code);
-    if (error) {
-      console.error("Error en la autenticación:", error, errorReason);
-      setError(`Error en la autenticación: ${error}. Razón: ${errorReason}`);
-    } else if (code) {
-      exchangeCodeForToken(code).then((token) => {
-        if (token) {
-          getUserInfo(token);
-          getUserMedia(token);
-        }
-      });
-    }
-  }, []);
+    useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      if (code) {
+        exchangeCodeForToken(code).then((token) => {
+          if (token) {
+            getUserInfo(token);
+            getUserMedia(token);
+          }
+        });
+      }
+    }, []);
+
 
   if (user?.providerId === "facebook.com") return <Navigate to={"/home"} />;
 
